@@ -3,7 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/demo/demo.iml" filepath="$PROJECT_DIR$/demo/demo.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/virt-travel-backend.iml" filepath="$PROJECT_DIR$/.idea/virt-travel-backend.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/virt-travel.iml" filepath="$PROJECT_DIR$/.idea/virt-travel.iml" />
     </modules>
   </component>
 </project>
