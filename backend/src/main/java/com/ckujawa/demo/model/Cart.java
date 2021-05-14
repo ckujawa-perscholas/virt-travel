@@ -1,22 +1,33 @@
 package com.ckujawa.demo.model;
 
 import lombok.Data;
-import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import java.util.Set;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
-@Document
+@Entity
 public class Cart {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @OneToMany
-    private Set<Trip> cartContents;
+    private List<Trip> cartContents = new ArrayList<>();
+
+
+    public void addTrip(Trip trip) {
+
+        cartContents.add(trip);
+    }
+
+    public void removeTrip(Long tripId){
+        cartContents = cartContents.stream()
+                .filter(p -> !p.getId().equals(tripId))
+                .collect(Collectors.toList());
+    }
+
 }

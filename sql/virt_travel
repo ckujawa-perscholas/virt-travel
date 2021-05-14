@@ -1,0 +1,48 @@
+drop database if exists virt_travel;
+create database virt_travel;
+
+use virt_travel;
+
+CREATE TABLE cart
+(
+   id bigint PRIMARY KEY NOT NULL AUTO_INCREMENT,
+)
+;
+
+CREATE TABLE trip
+(
+   id bigint PRIMARY KEY NOT NULL AUTO_INCREMENT,
+   cost decimal(19,2),
+   destination varchar(255),
+   image_url varchar(255),
+   seats_available int,
+   trip_name varchar(255)
+)
+;
+
+CREATE TABLE cart_cart_contents
+(
+   cart_id bigint NOT NULL,
+   cart_contents_id bigint NOT NULL
+)
+;
+ALTER TABLE cart_cart_contents
+ADD CONSTRAINT FK4o4182w7ag5ou4i8fbwqsvwa8
+FOREIGN KEY (cart_contents_id)
+REFERENCES trip(id)
+;
+ALTER TABLE cart_cart_contents
+ADD CONSTRAINT FKnt22i5yoj0yr2tm9w5ed2uk0y
+FOREIGN KEY (cart_id)
+REFERENCES cart(id)
+;
+CREATE INDEX FK4o4182w7ag5ou4i8fbwqsvwa8 ON cart_cart_contents(cart_contents_id)
+;
+CREATE INDEX FKnt22i5yoj0yr2tm9w5ed2uk0y ON cart_cart_contents(cart_id)
+;
+
+
+INSERT INTO trip (id,cost,destination,image_url,seats_available,trip_name) VALUES (1,7000.00,'London, England','london.jpg',100,'Lounging in London');
+INSERT INTO trip (id,cost,destination,image_url,seats_available,trip_name) VALUES (2,7500.00,'Paris, France','paris.jpg',125,'Party in Paris');
+INSERT INTO trip (id,cost,destination,image_url,seats_available,trip_name) VALUES (3,4500.00,'Montego Bay','jamaica.jpg',75,'Beachside in Jamaica');
+INSERT INTO trip (id,cost,destination,image_url,seats_available,trip_name) VALUES (4,10000.00,'Australia','australia.jpg',110,'Outback Adventure');

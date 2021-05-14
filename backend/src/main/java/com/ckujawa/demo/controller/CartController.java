@@ -14,10 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
+import java.util.List;
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * a class to provide cart related services
@@ -60,15 +58,39 @@ public class CartController {
 
     /**
      * Create a new cart
-     * @param cart the cart to create
+     *
      * @return the newly created cart
      */
     @ApiOperation("Create a new cart object based on the object passed in the request body.")
     @PostMapping
-    public ResponseEntity<?> createCart(@Valid @RequestBody Cart cart){
-        log.debug("Creating a new cart: " + cart.toString());
+    public ResponseEntity<?> createCart(){
+        log.debug("Creating a new cart...");
         try {
-            return new ResponseEntity<>(cartRepo.save(cart), HttpStatus.OK);
+            return new ResponseEntity<>(cartRepo.save(new Cart()), HttpStatus.OK);
+        } catch (Exception e){
+            log.error("An error occurred when creating a new cart: " + e.getMessage(), e);
+            return new ResponseEntity<>("We were unable to create a new cart.", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    /**
+     * Create a new cart
+     * @param tripId the id of a trip to add
+     * @return the newly created cart
+     */
+    @ApiOperation("Create a new cart object and add the trip to the cart.")
+    @PostMapping(value = "/{tripId}")
+    public ResponseEntity<?> createCart(@PathVariable Long tripId){
+        log.debug("Creating a new cart...");
+        try {
+            Optional<Trip> tripOptional = tripRepo.findById(tripId);
+            if (tripOptional.isPresent()) {
+                Cart cart = new Cart();
+                cart.addTrip(tripOptional.get());
+                return new ResponseEntity<>(cartRepo.save(cart), HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>("Unable to find a trip with id <" + tripId + ">.", HttpStatus.NO_CONTENT);
+            }
         } catch (Exception e){
             log.error("An error occurred when creating a new cart: " + e.getMessage(), e);
             return new ResponseEntity<>("We were unable to create a new cart.", HttpStatus.INTERNAL_SERVER_ERROR);
@@ -117,17 +139,14 @@ public class CartController {
         switch (action){
             case ADD:
                 Optional<Trip> tripOptional = tripRepo.findById(tripId);
-                Set<Trip> trips = cart.getCartContents();
+                List<Trip> trips = cart.getCartContents();
                 if (tripOptional.isPresent() && !trips.contains(tripOptional.get())){
-                    cart.getCartContents().add(tripOptional.get());
+                    cart.addTrip(tripOptional.get());
                     return cartRepo.save(cart);
                 }
                 return cart;
             case REMOVE:
-                Set<Trip> updatedTrips = cart.getCartContents().stream()
-                        .filter(p -> !p.getId().equals(tripId))
-                        .collect(Collectors.toSet());
-                cart.setCartContents(updatedTrips);
+                cart.removeTrip(tripId);
                 return cartRepo.save(cart);
             default:
                 throw new NoSuchOperationException(action + " is not a valid operation.");
