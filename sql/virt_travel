@@ -5,7 +5,7 @@ use virt_travel;
 
 CREATE TABLE cart
 (
-   id bigint PRIMARY KEY NOT NULL AUTO_INCREMENT,
+   id bigint PRIMARY KEY NOT NULL AUTO_INCREMENT
 )
 ;
 
