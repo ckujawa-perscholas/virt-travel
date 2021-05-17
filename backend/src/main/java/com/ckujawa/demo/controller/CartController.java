@@ -22,6 +22,7 @@ import java.util.Optional;
  */
 @Slf4j
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping(path = "/api/cart")
 @Api(value = "Calls to manage the cart and cart contents.")
 public class CartController {

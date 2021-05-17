@@ -5,5 +5,5 @@ export const ContentDiv = styled.div`
     width: 80%;
     max-width: 1200px;
     margin: 0 auto;
-    background-color: 
-`;
+    background-color: var(--cornflower);
+`

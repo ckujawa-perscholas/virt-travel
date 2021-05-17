@@ -15,6 +15,7 @@ import java.util.Optional;
 
 @Slf4j
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping(path = "/api/trips")
 @Api("API Calls to manage trips")
 public class TripController {
